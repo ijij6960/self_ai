@@ -201,6 +201,8 @@ function update(time = 0) {
 
 function updateScore() {
   document.title = `Tetris - ${player.score}`;
+  const el = document.getElementById('score');
+  if (el) el.textContent = player.score;
 }
 
 const colors = [

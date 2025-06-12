@@ -4,6 +4,11 @@ const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 let deck = [];
 let placed = 0;
 
+function updateCount() {
+  const el = document.getElementById('count');
+  if (el) el.textContent = placed;
+}
+
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -21,6 +26,7 @@ function init() {
   shuffle(deck);
   grid.innerHTML = '';
   placed = 0;
+  updateCount();
   for (let i=0;i<25;i++) {
     const div = document.createElement('div');
     div.className = 'card';
@@ -35,7 +41,9 @@ function place(div) {
   div.textContent = card;
   div.classList.add('revealed');
   placed++;
+  updateCount();
   if (placed === 25) alert('All cards placed!');
 }
 
 init();
+updateCount();

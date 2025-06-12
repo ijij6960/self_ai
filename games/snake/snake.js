@@ -4,6 +4,14 @@ const grid = 20;
 let count = 0;
 let snake = {x:160, y:160, dx:grid, dy:0, cells:[], max:4};
 let apple = {x:320, y:320};
+let score = 0;
+
+function updateScore() {
+  const el = document.getElementById('score');
+  if (el) el.textContent = score;
+}
+
+updateScore();
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -48,6 +56,8 @@ function loop() {
     ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
     if (cell.x === apple.x && cell.y === apple.y) {
       snake.max++;
+      score++;
+      updateScore();
       apple.x = getRandomInt(0, 20) * grid;
       apple.y = getRandomInt(0, 20) * grid;
     }
@@ -58,6 +68,8 @@ function loop() {
         snake.dx = grid; snake.dy = 0;
         apple.x = getRandomInt(0, 20) * grid;
         apple.y = getRandomInt(0, 20) * grid;
+        score = 0;
+        updateScore();
       }
     }
   });

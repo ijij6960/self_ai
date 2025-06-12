@@ -12,7 +12,7 @@ Each game lives inside the `games/` directory with its own HTML and JavaScript f
 
 ## Running the Games
 
-Open the corresponding `index.html` file for a game in your web browser. No additional dependencies are required.
+Open the top-level `index.html` file to choose a game, or open the specific `index.html` file for any game directly. No additional dependencies are required.
 
 ```
 ./games/tetris/index.html

@@ -2,6 +2,17 @@ const boardEl = document.getElementById('board');
 const size = 9;
 const mineCount = 10;
 let board = [];
+let startTime;
+let timerInterval;
+
+function startTimer() {
+  startTime = Date.now();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    const el = document.getElementById('timer');
+    if (el) el.textContent = Math.floor((Date.now() - startTime)/1000);
+  }, 1000);
+}
 
 function init() {
   board = [];
@@ -24,6 +35,7 @@ function init() {
   }
   placeMines();
   countNeighbors();
+  startTimer();
 }
 
 function placeMines() {
