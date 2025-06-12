@@ -205,7 +205,7 @@ function arenaSweep() {
     player.score += cleared * 10 * player.stage;
     if (player.lines >= player.stage * 10) {
       player.stage++;
-      dropInterval = Math.max(dropInterval * 0.9, 100);
+      dropInterval = Math.max(dropInterval * 0.8, 100);
       updateStage();
     }
     updateScore();
