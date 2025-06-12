@@ -217,8 +217,27 @@ function draw() {
   context.fillStyle = '#000';
   context.fillRect(0, 0, canvas.width, canvas.height);
 
+  drawGrid();
+
   drawMatrix(arena, {x:0, y:0});
   drawMatrix(player.matrix, player.pos);
+}
+
+function drawGrid() {
+  context.strokeStyle = 'rgba(255,255,255,0.1)';
+  context.lineWidth = 0.05;
+  for (let x = 0; x <= arena[0].length; ++x) {
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, arena.length);
+    context.stroke();
+  }
+  for (let y = 0; y <= arena.length; ++y) {
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(arena[0].length, y);
+    context.stroke();
+  }
 }
 
 function drawNext() {
