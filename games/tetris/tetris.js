@@ -212,7 +212,9 @@ function arenaSweep() {
   }
 }
 
-function drawMatrix(matrix, offset, ctx = context, colorOverride = null) {
+function drawMatrix(matrix, offset, ctx = context, colorOverride = null, alpha = 1) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
@@ -223,6 +225,7 @@ function drawMatrix(matrix, offset, ctx = context, colorOverride = null) {
       }
     });
   });
+  ctx.restore();
 }
 
 function drawGrid() {
@@ -250,7 +253,7 @@ function draw() {
 
   drawMatrix(arena, {x:0, y:0});
   const ghostPos = getGhostPosition();
-  drawMatrix(player.matrix, ghostPos, context, 'rgba(50,50,50,0.5)');
+  drawMatrix(player.matrix, ghostPos, context, null, 0.5);
   drawMatrix(player.matrix, player.pos);
 }
 
