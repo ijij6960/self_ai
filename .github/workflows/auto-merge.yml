@@ -1,18 +1,19 @@
-name: Auto Merge
+name: Auto Merge Flag
 
 on:
   pull_request:
     types: [opened, reopened, synchronize]
 
 permissions:
-  contents: write
   pull-requests: write
+  contents: write
 
 jobs:
-  auto-merge:
+  enable-auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - uses: peter-evans/enable-pull-request-automerge@v3
+      - name: Enable auto-merge (flag only)
+        uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: merge
