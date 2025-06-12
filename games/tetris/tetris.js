@@ -175,6 +175,18 @@ function playerRotate(dir) {
   }
 }
 
+function getGhostPosition() {
+  const ghost = {
+    pos: { x: player.pos.x, y: player.pos.y },
+    matrix: player.matrix
+  };
+  while (!collide(arena, ghost)) {
+    ghost.pos.y++;
+  }
+  ghost.pos.y--;
+  return ghost.pos;
+}
+
 function arenaSweep() {
   let cleared = 0;
   outer: for (let y = arena.length - 1; y > 0; --y) {
@@ -200,11 +212,11 @@ function arenaSweep() {
   }
 }
 
-function drawMatrix(matrix, offset, ctx = context) {
+function drawMatrix(matrix, offset, ctx = context, colorOverride = null) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        ctx.fillStyle = colors[value];
+        ctx.fillStyle = colorOverride || colors[value];
         ctx.fillRect(x + offset.x,
                      y + offset.y,
                      1, 1);
@@ -237,6 +249,8 @@ function draw() {
   drawGrid();
 
   drawMatrix(arena, {x:0, y:0});
+  const ghostPos = getGhostPosition();
+  drawMatrix(player.matrix, ghostPos, context, 'rgba(50,50,50,0.5)');
   drawMatrix(player.matrix, player.pos);
 }
 
@@ -276,6 +290,12 @@ function updateScore() {
 function updateStage() {
   const el = document.getElementById('stage');
   if (el) el.textContent = player.stage;
+  updateSpeed();
+}
+
+function updateSpeed() {
+  const el = document.getElementById('speed');
+  if (el) el.textContent = dropInterval;
 }
 
 const colors = [
@@ -306,4 +326,5 @@ document.addEventListener('keydown', event => {
 playerReset();
 updateScore();
 updateStage();
+updateSpeed();
 update();
