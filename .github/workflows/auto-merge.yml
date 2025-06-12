@@ -1,0 +1,21 @@
+name: Auto Merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-merge pull request
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          merge-method: merge
