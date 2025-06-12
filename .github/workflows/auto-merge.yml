@@ -3,19 +3,19 @@ name: Auto Merge
 on:
   pull_request:
     types:
-      - opened
-      - synchronize
-      - reopened
+      - labeled
 
 permissions:
   pull-requests: write
   contents: write
 
 jobs:
-  automerge:
+  auto-merge:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.state == 'open'
     steps:
-      - name: Auto-merge pull request
+      - name: Enable auto-merge for PRs with "automerge" label
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: merge
