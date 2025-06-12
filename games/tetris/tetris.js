@@ -17,7 +17,7 @@ const player = {
 
 let nextMatrix = null;
 
-let isPaused = false;
+let isPaused = true;
 const overlay = document.getElementById('overlay');
 const overText = document.getElementById('over-text');
 
@@ -34,7 +34,7 @@ function playStartSound() {
       const gain = audioCtx.createGain();
       osc.type = 'square';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.1, t);
+      gain.gain.setValueAtTime(0.025, t);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start(t);
@@ -57,7 +57,7 @@ function playEndSound() {
       const gain = audioCtx.createGain();
       osc.type = 'square';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.12, t);
+      gain.gain.setValueAtTime(0.03, t);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start(t);
@@ -76,7 +76,7 @@ function playStageUpSound() {
     const gain = audioCtx.createGain();
     osc.type = 'square';
     osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
@@ -96,7 +96,7 @@ function playLandSound() {
     osc2.type = 'square';
     osc1.frequency.value = 110;
     osc2.frequency.value = 165;
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.0125, audioCtx.currentTime);
     osc1.connect(gain);
     osc2.connect(gain);
     gain.connect(audioCtx.destination);
@@ -384,9 +384,11 @@ function draw() {
   drawGrid();
 
   drawMatrix(arena, {x:0, y:0});
-  const ghostPos = getGhostPosition();
-  drawMatrix(player.matrix, ghostPos, context, null, 0.35);
-  drawMatrix(player.matrix, player.pos);
+  if (player.matrix) {
+    const ghostPos = getGhostPosition();
+    drawMatrix(player.matrix, ghostPos, context, null, 0.35);
+    drawMatrix(player.matrix, player.pos);
+  }
 }
 
 function drawNext() {
@@ -440,6 +442,7 @@ function gameOver() {
   addHighScore(player.stage, player.score);
   isPaused = true;
   overText.textContent = `Game Over! Stage: ${player.stage} | Score: ${player.score}`;
+  if (restartBtn) restartBtn.textContent = 'Play Again';
   if (overlay) overlay.style.display = 'flex';
 }
 
@@ -454,6 +457,7 @@ function resetGame() {
   updateHighScores();
   isPaused = false;
   if (overlay) overlay.style.display = 'none';
+  if (restartBtn) restartBtn.textContent = 'Play Again';
   playerReset();
   playStartSound();
 }
@@ -485,10 +489,11 @@ document.addEventListener('keydown', event => {
 });
 
 const restartBtn = document.getElementById('restartBtn');
-if (restartBtn) restartBtn.addEventListener('click', resetGame);
+if (restartBtn) {
+  restartBtn.addEventListener('click', resetGame);
+  restartBtn.textContent = 'Start Game';
+}
 
-playerReset();
-playStartSound();
 updateScore();
 updateStage();
 updateSpeed();

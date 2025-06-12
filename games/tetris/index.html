@@ -14,7 +14,7 @@ canvas{background:#000;display:block;}
 </style>
 </head>
 <body>
-<h1>Tetris <span class="version">v0.2</span></h1>
+<h1>Tetris <span class="version">v0.2.1</span></h1>
 <div id="info" class="info">Score: <span id="score">0</span> | Stage: <span id="stage">1</span> | Speed: <span id="speed">1000</span>ms</div>
 <div class="board">
   <canvas id="game" width="240" height="400"></canvas>
@@ -24,9 +24,9 @@ canvas{background:#000;display:block;}
 <h2>Top 10 Records</h2>
 <ol id="records"></ol>
 <p><a href="../../index.html">Back to Main</a></p>
-<div id="overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;">
-  <div id="over-text"></div>
-  <button id="restartBtn">Play Again</button>
+<div id="overlay" style="display:flex;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);color:#fff;flex-direction:column;justify-content:center;align-items:center;gap:10px;">
+  <div id="over-text">Click Start to Play</div>
+  <button id="restartBtn">Start Game</button>
 </div>
 <script src="tetris.js"></script>
 </body>
