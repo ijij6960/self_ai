@@ -1,21 +1,21 @@
-name: Auto Merge
+name: Auto Approve and Merge
 
 on:
   pull_request:
-    types:
-      - labeled
+    types: [opened, reopened, synchronize]
 
 permissions:
-  pull-requests: write
   contents: write
+  pull-requests: write
 
 jobs:
-  auto-merge:
+  auto-approve-and-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.state == 'open'
     steps:
-      - name: Enable auto-merge for PRs with "automerge" label
-        uses: peter-evans/enable-pull-request-automerge@v3
+      - uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: merge
