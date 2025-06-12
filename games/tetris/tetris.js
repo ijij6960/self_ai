@@ -36,6 +36,40 @@ function playStageUpSound() {
   }
 }
 
+function playLandSound() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.value = 220;
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  } catch (e) {
+    /* ignore */
+  }
+}
+
+function playClearSound() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = 660;
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
+  } catch (e) {
+    /* ignore */
+  }
+}
+
 const STORAGE_KEY = 'tetrisHighScores';
 
 function getHighScores() {
@@ -157,6 +191,7 @@ function playerDrop() {
   if (collide(arena, player)) {
     player.pos.y--;
     merge(arena, player);
+    playLandSound();
     playerReset();
     arenaSweep();
   }
@@ -169,6 +204,7 @@ function playerHardDrop() {
   }
   player.pos.y--;
   merge(arena, player);
+  playLandSound();
   playerReset();
   arenaSweep();
   dropCounter = 0;
@@ -267,6 +303,7 @@ function arenaSweep() {
       updateStage();
       playStageUpSound();
     }
+    playClearSound();
     updateScore();
   }
 }
