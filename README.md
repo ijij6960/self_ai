@@ -1,5 +1,5 @@
 
-# Web Games Collection auto_test_1222
+# Web Games Collection auto_test333
 
 This repository contains simple web implementations of six classic games:
 
