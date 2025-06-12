@@ -107,6 +107,17 @@ function playerDrop() {
   dropCounter = 0;
 }
 
+function playerHardDrop() {
+  while (!collide(arena, player)) {
+    player.pos.y++;
+  }
+  player.pos.y--;
+  merge(arena, player);
+  playerReset();
+  arenaSweep();
+  dropCounter = 0;
+}
+
 function playerMove(dir) {
   player.pos.x += dir;
   if (collide(arena, player)) {
@@ -266,6 +277,8 @@ document.addEventListener('keydown', event => {
     playerMove(1);
   } else if (event.key === 'ArrowDown') {
     playerDrop();
+  } else if (event.code === 'Space') {
+    playerHardDrop();
   } else if (event.key === 'ArrowUp') {
     playerRotate(1);
   }
