@@ -15,7 +15,7 @@ Each game lives inside the `games/` directory with its own HTML and JavaScript f
 The easiest way to try the games is to visit the project page on GitHub Pages:
 
 ```
-https://ijij6960.github.io/
+https://ijij6960.github.io/self_ai/
 ```
 
 From there you can select a game to play. If you prefer, you can also open the individual game files locally:
