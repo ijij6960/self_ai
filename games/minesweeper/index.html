@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minesweeper</title>
+<style>
+body{margin:0;text-align:center;background:#222;color:#fff;font-family:sans-serif;}
+#board{display:inline-block;margin-top:20px;}
+.cell{width:30px;height:30px;border:1px solid #555;display:inline-block;line-height:30px;font-weight:bold;cursor:pointer;background:#777;color:#fff;user-select:none;}
+.revealed{background:#ccc;color:#000;}
+</style>
+</head>
+<body>
+<h1>Minesweeper</h1>
+<div id="board"></div>
+<p>Left click to reveal, right click to flag.</p>
+<script src="minesweeper.js"></script>
+</body>
+</html>
