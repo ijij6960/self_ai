@@ -21,22 +21,22 @@ let audioCtx;
 
 function playStartSound() {
   try {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const osc1 = audioCtx.createOscillator();
-    const osc2 = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc1.type = 'triangle';
-    osc2.type = 'triangle';
-    osc1.frequency.value = 523; // C5
-    osc2.frequency.value = 659; // E5
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc1.start();
-    osc2.start();
-    osc1.stop(audioCtx.currentTime + 0.3);
-    osc2.stop(audioCtx.currentTime + 0.3);
+    audioCtx =
+      audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [659, 494, 554, 587, 554, 494, 440, 440]; // Tetris theme
+    let t = audioCtx.currentTime;
+    notes.forEach(freq => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.1, t);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.15);
+      t += 0.15;
+    });
   } catch (e) {
     /* ignore */
   }
@@ -44,24 +44,22 @@ function playStartSound() {
 
 function playEndSound() {
   try {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const osc1 = audioCtx.createOscillator();
-    const osc2 = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc1.type = 'sine';
-    osc2.type = 'sine';
-    osc1.frequency.value = 440;
-    osc2.frequency.value = 220;
-    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc1.start();
-    osc2.start();
-    osc1.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.5);
-    osc2.frequency.linearRampToValueAtTime(55, audioCtx.currentTime + 0.5);
-    osc1.stop(audioCtx.currentTime + 0.6);
-    osc2.stop(audioCtx.currentTime + 0.6);
+    audioCtx =
+      audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const freqs = [659, 523, 415, 311];
+    let t = audioCtx.currentTime;
+    freqs.forEach(freq => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.12, t);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.15);
+      t += 0.15;
+    });
   } catch (e) {
     /* ignore */
   }
@@ -94,7 +92,7 @@ function playLandSound() {
     osc2.type = 'square';
     osc1.frequency.value = 110;
     osc2.frequency.value = 165;
-    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
     osc1.connect(gain);
     osc2.connect(gain);
     gain.connect(audioCtx.destination);
@@ -108,32 +106,7 @@ function playLandSound() {
 }
 
 function playClearSound() {
-  try {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const osc1 = audioCtx.createOscillator();
-    const osc2 = audioCtx.createOscillator();
-    const osc3 = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc1.type = 'triangle';
-    osc2.type = 'triangle';
-    osc3.type = 'triangle';
-    osc1.frequency.value = 523;
-    osc2.frequency.value = 659;
-    osc3.frequency.value = 784;
-    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    osc1.connect(gain);
-    osc2.connect(gain);
-    osc3.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc1.start();
-    osc2.start();
-    osc3.start();
-    osc1.stop(audioCtx.currentTime + 0.2);
-    osc2.stop(audioCtx.currentTime + 0.2);
-    osc3.stop(audioCtx.currentTime + 0.2);
-  } catch (e) {
-    /* ignore */
-  }
+  playEndSound();
 }
 
 const STORAGE_KEY = 'tetrisHighScores';
