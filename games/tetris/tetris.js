@@ -229,7 +229,7 @@ function drawMatrix(matrix, offset, ctx = context, colorOverride = null, alpha =
 }
 
 function drawGrid() {
-  context.strokeStyle = 'rgba(255,255,255,0.5)';
+  context.strokeStyle = 'rgba(255,255,255,0.9)';
   context.lineWidth = 0.05;
   for (let x = 0; x <= arena[0].length; x++) {
     context.beginPath();
