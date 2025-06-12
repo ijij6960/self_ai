@@ -17,6 +17,10 @@ const player = {
 
 let nextMatrix = null;
 
+let isPaused = false;
+const overlay = document.getElementById('overlay');
+const overText = document.getElementById('over-text');
+
 let audioCtx;
 
 function playStartSound() {
@@ -269,15 +273,7 @@ function playerReset() {
                  (player.matrix[0].length / 2 | 0);
   if (collide(arena, player)) {
     gameOver();
-    arena.forEach(row => row.fill(0));
-    player.score = 0;
-    player.lines = 0;
-    player.stage = 1;
-    dropInterval = 1000;
-    updateScore();
-    updateStage();
-    updateHighScores();
-    playStartSound();
+    return;
   }
 }
 
@@ -411,9 +407,11 @@ function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
 
-  dropCounter += deltaTime;
-  if (dropCounter > dropInterval) {
-    playerDrop();
+  if (!isPaused) {
+    dropCounter += deltaTime;
+    if (dropCounter > dropInterval) {
+      playerDrop();
+    }
   }
 
   draw();
@@ -440,7 +438,24 @@ function updateSpeed() {
 function gameOver() {
   playEndSound();
   addHighScore(player.stage, player.score);
-  alert(`Game Over! Stage: ${player.stage} | Score: ${player.score}`);
+  isPaused = true;
+  overText.textContent = `Game Over! Stage: ${player.stage} | Score: ${player.score}`;
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function resetGame() {
+  arena.forEach(row => row.fill(0));
+  player.score = 0;
+  player.lines = 0;
+  player.stage = 1;
+  dropInterval = 1000;
+  updateScore();
+  updateStage();
+  updateHighScores();
+  isPaused = false;
+  if (overlay) overlay.style.display = 'none';
+  playerReset();
+  playStartSound();
 }
 
 const colors = [
@@ -455,6 +470,7 @@ const colors = [
 ];
 
 document.addEventListener('keydown', event => {
+  if (isPaused) return;
   if (event.key === 'ArrowLeft') {
     playerMove(-1);
   } else if (event.key === 'ArrowRight') {
@@ -467,6 +483,9 @@ document.addEventListener('keydown', event => {
     playerRotate(1);
   }
 });
+
+const restartBtn = document.getElementById('restartBtn');
+if (restartBtn) restartBtn.addEventListener('click', resetGame);
 
 playerReset();
 playStartSound();
