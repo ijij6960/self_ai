@@ -1,7 +1,7 @@
 name: Enable Auto Merge
 
 on:
-  pull_request:
+  pull_request_target:          # ← pull_request 가 아니라 pull_request_target
     types: [opened, reopened, synchronize]
 
 permissions:
@@ -12,11 +12,17 @@ jobs:
   enable-auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository        # 이미 추가한 단계
+      # ① PR 작성자의 브랜치를 정확히 체크아웃
+      - name: Checkout PR branch
         uses: actions/checkout@v3
+        with:
+          ref:  ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          fetch-depth: 0           # (선택) 전체 히스토리 필요 시
 
-      - name: Enable auto-merge          # ⚠️ 여기 입력 키 수정!
+      # ② Auto-merge 플래그만 설정
+      - name: Enable auto-merge
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}   # ← token → github-token
-          merge-method: merge
+          token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: merge      # 필요 시 squash‧rebase 변경 가능
