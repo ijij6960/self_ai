@@ -34,7 +34,7 @@ function playStartSound() {
       const gain = audioCtx.createGain();
       osc.type = 'square';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.025, t);
+      gain.gain.setValueAtTime(0.001, t);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start(t);
@@ -57,7 +57,7 @@ function playEndSound() {
       const gain = audioCtx.createGain();
       osc.type = 'square';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.03, t);
+      gain.gain.setValueAtTime(0.001, t);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start(t);
@@ -76,7 +76,7 @@ function playStageUpSound() {
     const gain = audioCtx.createGain();
     osc.type = 'square';
     osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
@@ -96,7 +96,7 @@ function playLandSound() {
     osc2.type = 'square';
     osc1.frequency.value = 110;
     osc2.frequency.value = 165;
-    gain.gain.setValueAtTime(0.0125, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
     osc1.connect(gain);
     osc2.connect(gain);
     gain.connect(audioCtx.destination);
