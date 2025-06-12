@@ -4,6 +4,12 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
 const light = new THREE.PointLight(0xffffff, 1, 0);
 light.position.set(0, 50, 50);
 scene.add(light);
@@ -29,6 +35,10 @@ wall.position.z = -1;
 scene.add(wall);
 
 camera.position.z = 20;
+camera.lookAt(0, 0, 0);
+
+const ambientLight = new THREE.AmbientLight(0x404040); // soft light
+scene.add(ambientLight);
 
 let ballDirX = 0.25;
 let ballDirY = 0.15;
