@@ -3,6 +3,12 @@ const ctx = canvas.getContext('2d');
 let frames = 0;
 const gravity = 0.25;
 const jump = 4.6;
+let score = 0;
+
+function updateScore() {
+  const el = document.getElementById('score');
+  if (el) el.textContent = score;
+}
 
 const bird = {
   x:50,
@@ -43,9 +49,16 @@ const pipes = {
   },
   update() {
     if (frames % 100 === 0) {
-      this.list.push({x:canvas.width, y:Math.floor(Math.random()* (canvas.height- this.gap))});
+      this.list.push({x:canvas.width, y:Math.floor(Math.random()* (canvas.height- this.gap)), scored:false});
     }
     this.list.forEach(p => p.x -= 2);
+    this.list.forEach(p => {
+      if (!p.scored && p.x + this.width < bird.x) {
+        p.scored = true;
+        score++;
+        updateScore();
+      }
+    });
     if (this.list.length && this.list[0].x + this.width < 0) this.list.shift();
     this.list.forEach(p => {
       if (bird.x + bird.w > p.x && bird.x < p.x + this.width &&
@@ -60,6 +73,8 @@ function reset() {
   bird.y = 150;
   bird.velocity = 0;
   pipes.reset();
+  score = 0;
+  updateScore();
 }
 
 document.addEventListener('keydown', e => {
@@ -80,4 +95,5 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
+updateScore();
 loop();
