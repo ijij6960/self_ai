@@ -17,6 +17,62 @@ const player = {
 
 let nextMatrix = null;
 
+let audioCtx;
+
+function playStageUpSound() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
+  } catch (e) {
+    /* ignore */
+  }
+}
+
+const STORAGE_KEY = 'tetrisHighScores';
+
+function getHighScores() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveHighScores(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+function addHighScore(stage, score) {
+  const list = getHighScores();
+  list.push({ stage, score });
+  list.sort((a, b) => {
+    if (b.stage === a.stage) return b.score - a.score;
+    return b.stage - a.stage;
+  });
+  list.splice(10);
+  saveHighScores(list);
+}
+
+function updateHighScores() {
+  const el = document.getElementById('records');
+  if (!el) return;
+  const list = getHighScores();
+  el.innerHTML = '';
+  list.forEach(rec => {
+    const li = document.createElement('li');
+    li.textContent = `Stage ${rec.stage} - ${rec.score} pts`;
+    el.appendChild(li);
+  });
+}
+
 function createMatrix(w, h) {
   const matrix = [];
   while (h--) {
@@ -137,6 +193,7 @@ function playerReset() {
   player.pos.x = (arena[0].length / 2 | 0) -
                  (player.matrix[0].length / 2 | 0);
   if (collide(arena, player)) {
+    gameOver();
     arena.forEach(row => row.fill(0));
     player.score = 0;
     player.lines = 0;
@@ -144,6 +201,7 @@ function playerReset() {
     dropInterval = 1000;
     updateScore();
     updateStage();
+    updateHighScores();
   }
 }
 
@@ -207,6 +265,7 @@ function arenaSweep() {
       player.stage++;
       dropInterval = Math.max(dropInterval * 0.8, 100);
       updateStage();
+      playStageUpSound();
     }
     updateScore();
   }
@@ -301,6 +360,11 @@ function updateSpeed() {
   if (el) el.textContent = dropInterval;
 }
 
+function gameOver() {
+  addHighScore(player.stage, player.score);
+  alert(`Game Over! Stage: ${player.stage} | Score: ${player.score}`);
+}
+
 const colors = [
   null,
   '#FF0D72',
@@ -330,4 +394,5 @@ playerReset();
 updateScore();
 updateStage();
 updateSpeed();
+updateHighScores();
 update();
