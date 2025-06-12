@@ -1,4 +1,4 @@
-name: Auto Merge Flag
+name: Enable Auto Merge (flag only)
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ jobs:
   enable-auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Enable auto-merge (flag only)
+      - name: Enable auto-merge (no gh command)
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
