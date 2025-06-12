@@ -19,6 +19,54 @@ let nextMatrix = null;
 
 let audioCtx;
 
+function playStartSound() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc1.type = 'triangle';
+    osc2.type = 'triangle';
+    osc1.frequency.value = 523; // C5
+    osc2.frequency.value = 659; // E5
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc1.start();
+    osc2.start();
+    osc1.stop(audioCtx.currentTime + 0.3);
+    osc2.stop(audioCtx.currentTime + 0.3);
+  } catch (e) {
+    /* ignore */
+  }
+}
+
+function playEndSound() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc1.type = 'sine';
+    osc2.type = 'sine';
+    osc1.frequency.value = 440;
+    osc2.frequency.value = 220;
+    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc1.start();
+    osc2.start();
+    osc1.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.5);
+    osc2.frequency.linearRampToValueAtTime(55, audioCtx.currentTime + 0.5);
+    osc1.stop(audioCtx.currentTime + 0.6);
+    osc2.stop(audioCtx.currentTime + 0.6);
+  } catch (e) {
+    /* ignore */
+  }
+}
+
 function playStageUpSound() {
   try {
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
@@ -39,15 +87,21 @@ function playStageUpSound() {
 function playLandSound() {
   try {
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = 'square';
-    osc.frequency.value = 220;
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    osc.connect(gain);
+    osc1.type = 'sawtooth';
+    osc2.type = 'square';
+    osc1.frequency.value = 110;
+    osc2.frequency.value = 165;
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    osc1.connect(gain);
+    osc2.connect(gain);
     gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.1);
+    osc1.start();
+    osc2.start();
+    osc1.stop(audioCtx.currentTime + 0.07);
+    osc2.stop(audioCtx.currentTime + 0.07);
   } catch (e) {
     /* ignore */
   }
@@ -56,15 +110,27 @@ function playLandSound() {
 function playClearSound() {
   try {
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const osc3 = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.value = 660;
+    osc1.type = 'triangle';
+    osc2.type = 'triangle';
+    osc3.type = 'triangle';
+    osc1.frequency.value = 523;
+    osc2.frequency.value = 659;
+    osc3.frequency.value = 784;
     gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    osc.connect(gain);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    osc3.connect(gain);
     gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.15);
+    osc1.start();
+    osc2.start();
+    osc3.start();
+    osc1.stop(audioCtx.currentTime + 0.2);
+    osc2.stop(audioCtx.currentTime + 0.2);
+    osc3.stop(audioCtx.currentTime + 0.2);
   } catch (e) {
     /* ignore */
   }
@@ -238,6 +304,7 @@ function playerReset() {
     updateScore();
     updateStage();
     updateHighScores();
+    playStartSound();
   }
 }
 
@@ -398,6 +465,7 @@ function updateSpeed() {
 }
 
 function gameOver() {
+  playEndSound();
   addHighScore(player.stage, player.score);
   alert(`Game Over! Stage: ${player.stage} | Score: ${player.score}`);
 }
@@ -428,6 +496,7 @@ document.addEventListener('keydown', event => {
 });
 
 playerReset();
+playStartSound();
 updateScore();
 updateStage();
 updateSpeed();
