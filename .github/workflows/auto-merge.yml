@@ -12,11 +12,11 @@ jobs:
   enable-auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository        # 이미 추가한 단계
         uses: actions/checkout@v3
 
-      - name: Enable auto-merge
+      - name: Enable auto-merge          # ⚠️ 여기 입력 키 수정!
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}   # ← token → github-token
           merge-method: merge
