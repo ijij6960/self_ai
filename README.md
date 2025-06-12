@@ -1,4 +1,4 @@
-# Web Games Collection
+# Web Games Collection ㅅㄷㄴㅅ
 
 This repository contains simple web implementations of six classic games:
 
