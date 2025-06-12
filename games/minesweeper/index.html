@@ -8,10 +8,11 @@ body{margin:0;text-align:center;background:#222;color:#fff;font-family:sans-seri
 #board{display:inline-block;margin-top:20px;}
 .cell{width:30px;height:30px;border:1px solid #555;display:inline-block;line-height:30px;font-weight:bold;cursor:pointer;background:#777;color:#fff;user-select:none;}
 .revealed{background:#ccc;color:#000;}
+.version{font-size:0.8em;color:#ccc;margin-left:4px;}
 </style>
 </head>
 <body>
-<h1>Minesweeper</h1>
+<h1>Minesweeper <span class="version">v1.0</span></h1>
 <div id="board"></div>
 <p>Time: <span id="timer">0</span>s</p>
 <p>Left click to reveal, right click to flag.</p>
