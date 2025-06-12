@@ -34,6 +34,9 @@ function loop() {
   if (++count < 4) return;
   count = 0;
   ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#fff';
+  ctx.font = '16px sans-serif';
+  ctx.fillText('Score: ' + score, 10, 20);
 
   snake.x += snake.dx;
   snake.y += snake.dy;
