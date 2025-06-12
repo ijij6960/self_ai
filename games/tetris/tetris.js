@@ -2,12 +2,20 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 context.scale(20, 20);
 
+const nextCanvas = document.getElementById('next');
+const nextCtx = nextCanvas.getContext('2d');
+nextCtx.scale(20, 20);
+
 const arena = createMatrix(12, 20);
 const player = {
   pos: {x: 0, y: 0},
   matrix: null,
-  score: 0
+  score: 0,
+  lines: 0,
+  stage: 1
 };
+
+let nextMatrix = null;
 
 function createMatrix(w, h) {
   const matrix = [];
@@ -99,6 +107,17 @@ function playerDrop() {
   dropCounter = 0;
 }
 
+function playerHardDrop() {
+  while (!collide(arena, player)) {
+    player.pos.y++;
+  }
+  player.pos.y--;
+  merge(arena, player);
+  playerReset();
+  arenaSweep();
+  dropCounter = 0;
+}
+
 function playerMove(dir) {
   player.pos.x += dir;
   if (collide(arena, player)) {
@@ -108,14 +127,23 @@ function playerMove(dir) {
 
 function playerReset() {
   const pieces = 'ILJOTSZ';
-  player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+  if (!nextMatrix) {
+    nextMatrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+  }
+  player.matrix = nextMatrix;
+  nextMatrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+  drawNext();
   player.pos.y = 0;
   player.pos.x = (arena[0].length / 2 | 0) -
                  (player.matrix[0].length / 2 | 0);
   if (collide(arena, player)) {
     arena.forEach(row => row.fill(0));
     player.score = 0;
+    player.lines = 0;
+    player.stage = 1;
+    dropInterval = 1000;
     updateScore();
+    updateStage();
   }
 }
 
@@ -148,6 +176,7 @@ function playerRotate(dir) {
 }
 
 function arenaSweep() {
+  let cleared = 0;
   outer: for (let y = arena.length - 1; y > 0; --y) {
     for (let x = 0; x < arena[y].length; ++x) {
       if (arena[y][x] === 0) {
@@ -157,19 +186,28 @@ function arenaSweep() {
     const row = arena.splice(y, 1)[0].fill(0);
     arena.unshift(row);
     ++y;
-    player.score += 10;
+    cleared++;
   }
-  updateScore();
+  if (cleared > 0) {
+    player.lines += cleared;
+    player.score += cleared * 10 * player.stage;
+    if (player.lines >= player.stage * 10) {
+      player.stage++;
+      dropInterval = Math.max(dropInterval * 0.9, 100);
+      updateStage();
+    }
+    updateScore();
+  }
 }
 
-function drawMatrix(matrix, offset) {
+function drawMatrix(matrix, offset, ctx = context) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        context.fillStyle = colors[value];
-        context.fillRect(x + offset.x,
-                         y + offset.y,
-                         1, 1);
+        ctx.fillStyle = colors[value];
+        ctx.fillRect(x + offset.x,
+                     y + offset.y,
+                     1, 1);
       }
     });
   });
@@ -181,6 +219,17 @@ function draw() {
 
   drawMatrix(arena, {x:0, y:0});
   drawMatrix(player.matrix, player.pos);
+}
+
+function drawNext() {
+  nextCtx.fillStyle = '#000';
+  nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+  if (nextMatrix) {
+    // center preview a bit
+    const xOff = Math.floor((nextCanvas.width/20 - nextMatrix[0].length)/2);
+    const yOff = Math.floor((nextCanvas.height/20 - nextMatrix.length)/2);
+    drawMatrix(nextMatrix, {x:xOff, y:yOff}, nextCtx);
+  }
 }
 
 let dropCounter = 0;
@@ -205,6 +254,11 @@ function updateScore() {
   if (el) el.textContent = player.score;
 }
 
+function updateStage() {
+  const el = document.getElementById('stage');
+  if (el) el.textContent = player.stage;
+}
+
 const colors = [
   null,
   '#FF0D72',
@@ -223,6 +277,8 @@ document.addEventListener('keydown', event => {
     playerMove(1);
   } else if (event.key === 'ArrowDown') {
     playerDrop();
+  } else if (event.code === 'Space') {
+    playerHardDrop();
   } else if (event.key === 'ArrowUp') {
     playerRotate(1);
   }
@@ -230,4 +286,5 @@ document.addEventListener('keydown', event => {
 
 playerReset();
 updateScore();
+updateStage();
 update();
