@@ -229,7 +229,7 @@ function drawMatrix(matrix, offset, ctx = context, colorOverride = null, alpha =
 }
 
 function drawGrid() {
-  context.strokeStyle = 'rgba(255,255,255,0.1)';
+  context.strokeStyle = 'rgba(255,255,255,0.3)';
   context.lineWidth = 0.05;
   for (let x = 0; x <= arena[0].length; x++) {
     context.beginPath();
@@ -253,7 +253,7 @@ function draw() {
 
   drawMatrix(arena, {x:0, y:0});
   const ghostPos = getGhostPosition();
-  drawMatrix(player.matrix, ghostPos, context, null, 0.5);
+  drawMatrix(player.matrix, ghostPos, context, null, 0.8);
   drawMatrix(player.matrix, player.pos);
 }
 
