@@ -2,23 +2,41 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Game Collection</title>
+
+<title>Game Hub</title>
 <style>
-body{background:#222;color:#fff;text-align:center;font-family:sans-serif;margin:0;}
-ul{list-style:none;padding:0;}
-li{margin:10px 0;}
-a{color:#4af;text-decoration:none;font-size:20px;}
+body{margin:0;padding:20px;font-family:Arial,sans-serif;background:#f2f2f2;text-align:center;}
+h1{color:#333;}
+.games{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin-top:40px;}
+.game{background:#fff;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.2);width:180px;text-decoration:none;color:#333;}
+.game img{width:100%;border-top-left-radius:8px;border-top-right-radius:8px;}
+.game h2{font-size:20px;margin:10px 0;}
 </style>
 </head>
 <body>
-<h1>Web Games Collection</h1>
-<ul>
-  <li><a href="games/tetris/index.html">Tetris</a></li>
-  <li><a href="games/snake/index.html">Snake</a></li>
-  <li><a href="games/minesweeper/index.html">Minesweeper</a></li>
-  <li><a href="games/poker-solitaire/index.html">Poker Solitaire</a></li>
-  <li><a href="games/flappy-bird/index.html">Flappy Bird</a></li>
-</ul>
-<p>Select a game to start playing!</p>
+<h1>Simple Web Game Collection</h1>
+<div class="games">
+<a class="game" href="games/tetris/index.html">
+<img src="https://dummyimage.com/600x400/000/fff&text=Tetris" alt="Tetris">
+<h2>Tetris</h2>
+</a>
+<a class="game" href="games/snake/index.html">
+<img src="https://dummyimage.com/600x400/000/fff&text=Snake" alt="Snake">
+<h2>Snake</h2>
+</a>
+<a class="game" href="games/minesweeper/index.html">
+<img src="https://dummyimage.com/600x400/000/fff&text=Minesweeper" alt="Minesweeper">
+<h2>Minesweeper</h2>
+</a>
+<a class="game" href="games/poker-solitaire/index.html">
+<img src="https://dummyimage.com/600x400/000/fff&text=Poker" alt="Poker Solitaire">
+<h2>Poker Solitaire</h2>
+</a>
+<a class="game" href="games/flappy-bird/index.html">
+<img src="https://dummyimage.com/600x400/000/fff&text=Flappy+Bird" alt="Flappy Bird">
+<h2>Flappy Bird</h2>
+</a>
+</div>
+
 </body>
 </html>
